@@ -50,6 +50,14 @@ Tambahkan melalui Project Settings > Environment Variables di Vercel:
 
 Jangan commit `.env` atau menempelkan nilai rahasia ke `vercel.json`.
 
+### Struktur album Google Drive
+
+Buat subfolder di dalam folder Drive utama untuk setiap tanggal atau kegiatan,
+misalnya `17 Agustus 2026` atau `Kerja Bakti Gang Melati`. Nama subfolder akan
+menjadi judul album pada halaman Momen dan hanya foto di dalam subfolder itu
+yang tampil di bawah judul tersebut. Foto yang diletakkan langsung pada folder
+utama masuk ke album `Dokumentasi Umum`. Subfolder bertingkat juga didukung.
+
 ### Import sekaligus
 
 Gunakan isi file `.env.vercel.example`, lalu ganti terlebih dahulu semua nilai

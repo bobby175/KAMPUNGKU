@@ -29,11 +29,11 @@ class PortalController extends Controller
     public function events(): View { return view('events', $this->portalViewData()); }
     public function moments(GoogleDriveGallery $drive): View
     {
-        $driveError = null; $drivePhotos = [];
+        $driveError = null; $driveAlbums = [];
         if ($drive->configured()) {
-            try { $drivePhotos = $drive->photos(); } catch (\Throwable $error) { report($error); $driveError = 'Galeri Google Drive belum dapat dimuat.'; }
+            try { $driveAlbums = $drive->albums(); } catch (\Throwable $error) { report($error); $driveError = 'Galeri Google Drive belum dapat dimuat.'; }
         }
-        return view('moments', [...$this->portalViewData(), 'drivePhotos'=>$drivePhotos, 'driveConfigured'=>$drive->configured(), 'driveError'=>$driveError]);
+        return view('moments', [...$this->portalViewData(), 'driveAlbums'=>$driveAlbums, 'driveConfigured'=>$drive->configured(), 'driveError'=>$driveError]);
     }
 
     public function driveImage(string $fileId, GoogleDriveGallery $drive): RedirectResponse
@@ -82,6 +82,9 @@ class PortalController extends Controller
         } elseif ($section === 'officials') {
             $v = $request->validate(['name'=>'required|max:120','position'=>'required|max:120']);
             $data['officials'][] = ['id'=>$id, ...$v];
+        } elseif ($section === 'home-content') {
+            $validated = $request->validate(['home'=>'required|array', 'home.*'=>'required|string|max:500']);
+            $data['home_content'] = array_replace($this->defaultHomeContent(), $validated['home']);
         } else abort(404);
         $this->save($data);
         return back()->with('success', 'Perubahan berhasil disimpan.');
@@ -120,6 +123,7 @@ class PortalController extends Controller
         if ($payload) {
             $data = json_decode($payload, true);
             $data['officials'] ??= [];
+            $data['home_content'] = array_replace($this->defaultHomeContent(), $data['home_content'] ?? []);
             return $data;
         }
         $data = [
@@ -137,7 +141,41 @@ class PortalController extends Controller
                 ['id'=>2,'date'=>'28 Juli 2026','title'=>'Juara Lomba Kebersihan','description'=>'RT 04 meraih juara dua tingkat kelurahan.','icon'=>'◆','media_type'=>null,'media_url'=>null],
             ],
             'officials'=>[],
+            'home_content'=>$this->defaultHomeContent(),
         ]; $this->save($data); return $data;
+    }
+
+    private function defaultHomeContent(): array
+    {
+        return [
+            'hero_kicker'=>'PORTAL KOMUNITAS / SA’AR KLECO',
+            'hero_title_line_1'=>'Tetangga dekat,',
+            'hero_title_emphasis'=>'kebersamaan',
+            'hero_title_line_3'=>'erat.',
+            'hero_lead'=>'Informasi warga yang tertata, transparan, dan mudah dijangkau dalam satu ruang bersama.',
+            'agenda_button'=>'Lihat agenda',
+            'cash_button'=>'Buka laporan kas',
+            'panel_label'=>'RT 002 / RW 003',
+            'panel_title'=>'Ruang hidup yang kita rawat bersama.',
+            'panel_tagline'=>'GUYUP · RUKUN · BEBARENGAN',
+            'moments_kicker'=>'MOMEN TERBARU',
+            'moments_title'=>'Kabar dalam gambar.',
+            'moments_link'=>'LIHAT SEMUA',
+            'portal_kicker'=>'JELAJAHI PORTAL',
+            'portal_title'=>'Informasi penting, di halaman yang tepat.',
+            'cash_label'=>'01 / TRANSPARANSI',
+            'cash_title'=>'Kas Warga',
+            'cash_description'=>'Lihat saldo dan seluruh riwayat transaksi warga.',
+            'agenda_label'=>'02 / KEBERSAMAAN',
+            'agenda_title'=>'Agenda',
+            'agenda_description'=>'Jadwal acara, kerja bakti, dan pelayanan warga.',
+            'moments_label'=>'03 / DOKUMENTASI',
+            'moments_card_title'=>'Momen',
+            'moments_description'=>'Cerita, foto, dan video dari lingkungan kita.',
+            'card_action'=>'BUKA HALAMAN',
+            'officials_kicker'=>'PENGURUS LINGKUNGAN',
+            'officials_title'=>'Nama pengurus dan jabatan.',
+        ];
     }
 
     private function save(array $data): void

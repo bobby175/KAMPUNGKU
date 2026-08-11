@@ -19,12 +19,20 @@ class GoogleDriveGallery
 
     public function photos(): array
     {
+        return array_values(array_merge(...array_map(
+            fn (array $album) => $album['photos'],
+            $this->albums(),
+        )));
+    }
+
+    public function albums(): array
+    {
         if (! $this->configured()) return [];
 
         return Cache::remember(
-            'google-drive-gallery.'.sha1((string) config('google-drive.folder_id')),
+            'google-drive-albums-v2.'.sha1((string) config('google-drive.folder_id')),
             max(30, (int) config('google-drive.cache_seconds')),
-            fn () => $this->fetchPhotos(),
+            fn () => $this->fetchAlbums(),
         );
     }
 
@@ -39,14 +47,57 @@ class GoogleDriveGallery
         return ['body' => $response->body(), 'type' => $response->header('Content-Type') ?: $photo['mimeType']];
     }
 
-    private function fetchPhotos(): array
+    private function fetchAlbums(): array
+    {
+        $rootId = (string) config('google-drive.folder_id');
+        $items = $this->children($rootId);
+        $albums = [];
+        $rootPhotos = $this->onlyPhotos($items);
+
+        if ($rootPhotos) {
+            $albums[] = ['id' => $rootId, 'title' => 'Dokumentasi Umum', 'photos' => $rootPhotos];
+        }
+
+        foreach ($this->onlyFolders($items) as $folder) {
+            $albums = array_merge($albums, $this->folderAlbums($folder, '', 0));
+        }
+
+        usort($albums, fn (array $a, array $b) => strcmp(
+            $b['photos'][0]['modifiedTime'] ?? '',
+            $a['photos'][0]['modifiedTime'] ?? '',
+        ));
+
+        return $albums;
+    }
+
+    private function folderAlbums(array $folder, string $parent, int $depth): array
+    {
+        if ($depth > 5) return [];
+
+        $title = $parent ? $parent.' / '.$folder['name'] : $folder['name'];
+        $items = $this->children($folder['id']);
+        $albums = [];
+        $photos = $this->onlyPhotos($items);
+
+        if ($photos) {
+            $albums[] = ['id' => $folder['id'], 'title' => $title, 'photos' => $photos];
+        }
+
+        foreach ($this->onlyFolders($items) as $child) {
+            $albums = array_merge($albums, $this->folderAlbums($child, $title, $depth + 1));
+        }
+
+        return $albums;
+    }
+
+    private function children(string $folderId): array
     {
         $files = []; $pageToken = null;
         do {
             $params = [
-                'q' => sprintf("'%s' in parents and mimeType contains 'image/' and trashed = false", config('google-drive.folder_id')),
+                'q' => sprintf("'%s' in parents and trashed = false and (mimeType contains 'image/' or mimeType = 'application/vnd.google-apps.folder')", $folderId),
                 'fields' => 'nextPageToken,files(id,name,mimeType,modifiedTime,size)',
-                'orderBy' => 'modifiedTime desc',
+                'orderBy' => 'name',
                 'pageSize' => 1000,
             ];
             if ($pageToken) $params['pageToken'] = $pageToken;
@@ -58,6 +109,18 @@ class GoogleDriveGallery
         } while ($pageToken);
 
         return $files;
+    }
+
+    private function onlyPhotos(array $items): array
+    {
+        $photos = array_values(array_filter($items, fn (array $item) => str_starts_with($item['mimeType'] ?? '', 'image/')));
+        usort($photos, fn (array $a, array $b) => strcmp($b['modifiedTime'] ?? '', $a['modifiedTime'] ?? ''));
+        return $photos;
+    }
+
+    private function onlyFolders(array $items): array
+    {
+        return array_values(array_filter($items, fn (array $item) => ($item['mimeType'] ?? '') === 'application/vnd.google-apps.folder'));
     }
 
     private function request(): PendingRequest
