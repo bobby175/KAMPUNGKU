@@ -89,12 +89,18 @@ return [
             'url' => env(
                 'DB_URL',
                 env(
-                    'DATABASE_URL_UNPOOLED',
+                    'DB_POSTGRES_URL_NON_POOLING',
                     env(
-                        'STORAGE_URL_UNPOOLED',
+                        'DB_DATABASE_URL',
                         env(
-                            'POSTGRES_URL_NON_POOLING',
-                            env('DATABASE_URL', env('STORAGE_URL', env('POSTGRES_URL')))
+                            'DATABASE_URL_UNPOOLED',
+                            env(
+                                'STORAGE_URL_UNPOOLED',
+                                env(
+                                    'POSTGRES_URL_NON_POOLING',
+                                    env('DATABASE_URL', env('STORAGE_URL', env('POSTGRES_URL')))
+                                )
+                            )
                         )
                     )
                 )
