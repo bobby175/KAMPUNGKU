@@ -75,6 +75,11 @@ Jadikan folder `ready to publik` sebagai root repository Git tersendiri, lalu im
 
 PHP pada Vercel menggunakan runtime komunitas `vercel-php@0.8.0` (PHP 8.4), bukan runtime resmi Vercel. Uji semua fungsi setelah deployment pertama.
 
+Routing deployment mengarahkan aset CSS/gambar secara eksplisit dan seluruh
+halaman aplikasi ke fungsi `api/index.php`. Jangan menambahkan `handle:
+filesystem` sebelum route Laravel karena `public/index.php` dapat terkirim
+sebagai unduhan source PHP.
+
 ## Checklist setelah deploy
 
 - Beranda, Kas RT, Agenda, dan Momen dapat dibuka.
