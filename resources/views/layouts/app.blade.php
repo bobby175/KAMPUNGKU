@@ -11,15 +11,17 @@
     <meta property="og:title" content="@yield('title', 'Ruang Warga Sa’ar Kleco')">
     <meta property="og:description" content="Informasi warga yang tertata, transparan, dan mudah dijangkau dalam satu ruang bersama.">
     <meta property="og:url" content="{{ request()->fullUrl() }}">
-    <meta property="og:image" content="{{ asset('images/social-share.png') }}">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="1728">
-    <meta property="og:image:height" content="909">
+    <meta property="og:image" content="{{ url('/images/social-share.jpg') }}?v=3">
+    <meta property="og:image:url" content="{{ url('/images/social-share.jpg') }}?v=3">
+    <meta property="og:image:secure_url" content="{{ url('/images/social-share.jpg') }}?v=3">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Ruang Warga Sa’ar Kleco, RT 002 RW 003">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('title', 'Ruang Warga Sa’ar Kleco')">
     <meta name="twitter:description" content="Portal informasi dan kebersamaan warga Sa’ar Kleco.">
-    <meta name="twitter:image" content="{{ asset('images/social-share.png') }}">
+    <meta name="twitter:image" content="{{ url('/images/social-share.jpg') }}?v=3">
     <link rel="stylesheet" href="{{ asset('css/portal.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ticker.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
