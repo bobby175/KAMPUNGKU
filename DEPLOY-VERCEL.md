@@ -62,6 +62,10 @@ karena lebih aman untuk migration Laravel, lalu memakai `DATABASE_URL` sebagai
 fallback. Connection string Neon tidak perlu disalin ke template. Pastikan kedua
 variabel tersedia untuk Production dan Preview.
 
+Jika resource pernah dibuat dengan **Custom Prefix** `STORAGE`, aplikasi juga
+mendukung `STORAGE_URL` dan `STORAGE_URL_UNPOOLED`. Nama lama Vercel
+`POSTGRES_URL` dan `POSTGRES_URL_NON_POOLING` juga didukung.
+
 ## 5. Deploy
 
 Jadikan folder `ready to publik` sebagai root repository Git tersendiri, lalu import repository tersebut ke Vercel. Vercel akan membaca `vercel.json`, memasang dependency Composer, menjalankan migration, dan menggunakan `api/index.php` sebagai entrypoint Laravel.
