@@ -80,6 +80,10 @@ halaman aplikasi ke fungsi `api/index.php`. Jangan menambahkan `handle:
 filesystem` sebelum route Laravel karena `public/index.php` dapat terkirim
 sebagai unduhan source PHP.
 
+Entrypoint menetapkan `LARAVEL_STORAGE_PATH` ke `/tmp/laravel-storage` sebelum
+bootstrap aplikasi agar log, session, cache, dan Blade dapat ditulis pada
+filesystem sementara Vercel.
+
 ## Checklist setelah deploy
 
 - Beranda, Kas RT, Agenda, dan Momen dapat dibuka.
