@@ -86,7 +86,7 @@ filesystem sementara Vercel.
 
 ## Checklist setelah deploy
 
-- Beranda, Kas RT, Agenda, dan Momen dapat dibuka.
+- Beranda, Kas Warga, Agenda, dan Momen dapat dibuka.
 - CSS dan thumbnail sosial tampil.
 - Login admin berhasil.
 - Tambah/hapus Kas, Agenda, Pengurus, serta edit Pengumuman tetap tersimpan setelah redeploy.

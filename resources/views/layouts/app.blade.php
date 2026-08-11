@@ -22,6 +22,8 @@
     <meta name="twitter:title" content="@yield('title', 'Ruang Warga Sa’ar Kleco')">
     <meta name="twitter:description" content="Portal informasi dan kebersamaan warga Sa’ar Kleco.">
     <meta name="twitter:image" content="{{ url('/images/social-share.jpg') }}?v=3">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/portal.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ticker.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
@@ -29,13 +31,13 @@
 <body>
 <header>
     <nav class="nav shell">
-        <a class="brand" href="{{ route('home') }}"><b>RW</b><span>Ruang Warga Sa’ar Kleco<small>RT 002 · RW 003</small></span></a>
+        <a class="brand" href="{{ route('home') }}"><img class="brand-logo" src="{{ asset('images/logo-warga.png') }}" alt="Logo Ruang Warga Sa’ar Kleco"><span>Ruang Warga Sa’ar Kleco<small>RT 002 · RW 003</small></span></a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu"><span></span><span></span><span></span><b>Menu</b></button>
         <button class="menu-backdrop" type="button" aria-label="Tutup menu"></button>
         <div class="links" id="site-menu">
             <div class="menu-head"><div><small>NAVIGASI WARGA</small><strong>RT 002 · RW 003</strong></div><button class="menu-close" type="button" aria-label="Tutup menu">×</button></div>
             <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}"><span>01</span><b>Beranda</b><small>Ringkasan portal warga</small></a>
-            <a class="{{ request()->routeIs('cash') ? 'active' : '' }}" href="{{ route('cash') }}"><span>02</span><b>Kas RT</b><small>Saldo dan transaksi</small></a>
+            <a class="{{ request()->routeIs('cash') ? 'active' : '' }}" href="{{ route('cash') }}"><span>02</span><b>Kas Warga</b><small>Saldo dan transaksi</small></a>
             <a class="{{ request()->routeIs('events') ? 'active' : '' }}" href="{{ route('events') }}"><span>03</span><b>Agenda</b><small>Jadwal kegiatan warga</small></a>
             <a class="{{ request()->routeIs('moments') ? 'active' : '' }}" href="{{ route('moments') }}"><span>04</span><b>Momen</b><small>Dokumentasi kebersamaan</small></a>
             @if(session('admin'))
@@ -57,7 +59,7 @@
 @if(session('admin'))<section class="announcement-editor"><form class="shell" method="post" action="{{ route('admin.store', 'announcement') }}">@csrf<label for="announcement-text">Edit pengumuman</label><input id="announcement-text" name="announcement" value="{{ $data['announcement'] }}" maxlength="500" required><button class="btn copper" type="submit">Simpan teks</button><small>Agenda terdekat ditambahkan otomatis dari halaman Agenda.</small></form></section>@endif
 @endisset
 @yield('content')
-<footer><div class="shell"><div class="brand inverse"><b>RW</b><span>Ruang Warga Sa’ar Kleco<small>RT 002 · RW 003</small></span></div><p>© {{ date('Y') }} RT 002 / RW 003 · Dibuat dengan semangat gotong royong.</p></div></footer>
+<footer><div class="shell"><div class="brand inverse"><img class="brand-logo" src="{{ asset('images/logo-warga.png') }}" alt=""><span>Ruang Warga Sa’ar Kleco<small>RT 002 · RW 003</small></span></div><p>© {{ date('Y') }} RT 002 / RW 003 · Dibuat dengan semangat gotong royong.</p></div></footer>
 <script>
 (()=>{const toggle=document.querySelector('.nav-toggle');const menu=document.querySelector('#site-menu');const close=document.querySelector('.menu-close');const backdrop=document.querySelector('.menu-backdrop');if(!toggle||!menu)return;const setMenu=open=>{document.body.classList.toggle('menu-open',open);toggle.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-hidden',String(!open));if(open)setTimeout(()=>close?.focus(),280);else toggle.focus()};menu.setAttribute('aria-hidden','true');toggle.addEventListener('click',()=>setMenu(!document.body.classList.contains('menu-open')));close?.addEventListener('click',()=>setMenu(false));backdrop?.addEventListener('click',()=>setMenu(false));menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>setMenu(false)));document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.body.classList.contains('menu-open'))setMenu(false)})})();
 </script>

@@ -5,7 +5,7 @@ Versi Laravel yang dipersiapkan untuk deployment Vercel tanpa menyertakan rahasi
 Fitur utama:
 
 - Beranda dan pengumuman terhubung agenda
-- Kas RT dengan perhitungan otomatis
+- Kas Warga dengan perhitungan otomatis
 - Agenda warga
 - Galeri Google Drive dan lightbox
 - Data pengurus
