@@ -49,7 +49,7 @@
             "@php artisan test"
         ],
         "vercel": [
-            "@php artisan migrate --force"
+            "@php artisan migrate --force --no-interaction -vvv"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

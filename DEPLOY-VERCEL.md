@@ -56,10 +56,11 @@ Gunakan isi file `.env.vercel.example`, lalu ganti terlebih dahulu semua nilai
 yang diawali `GANTI_DENGAN_`. Pada formulir pembuatan project Vercel, buka
 **Environment Variables**, klik **Import .env**, lalu tempel seluruh isinya.
 
-Integrasi Neon menambahkan `DATABASE_URL` secara otomatis. Aplikasi akan memakai
-variabel tersebut sebagai koneksi PostgreSQL, jadi connection string Neon tidak
-perlu disalin ke template. Pastikan `DATABASE_URL` tetap tersedia untuk
-Production dan Preview.
+Integrasi Neon menambahkan `DATABASE_URL` dan `DATABASE_URL_UNPOOLED` secara
+otomatis. Aplikasi memprioritaskan koneksi langsung `DATABASE_URL_UNPOOLED`
+karena lebih aman untuk migration Laravel, lalu memakai `DATABASE_URL` sebagai
+fallback. Connection string Neon tidak perlu disalin ke template. Pastikan kedua
+variabel tersedia untuk Production dan Preview.
 
 ## 5. Deploy
 
