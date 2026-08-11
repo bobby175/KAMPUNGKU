@@ -50,6 +50,17 @@ Tambahkan melalui Project Settings > Environment Variables di Vercel:
 
 Jangan commit `.env` atau menempelkan nilai rahasia ke `vercel.json`.
 
+### Import sekaligus
+
+Gunakan isi file `.env.vercel.example`, lalu ganti terlebih dahulu semua nilai
+yang diawali `GANTI_DENGAN_`. Pada formulir pembuatan project Vercel, buka
+**Environment Variables**, klik **Import .env**, lalu tempel seluruh isinya.
+
+Integrasi Neon menambahkan `DATABASE_URL` secara otomatis. Aplikasi akan memakai
+variabel tersebut sebagai koneksi PostgreSQL, jadi connection string Neon tidak
+perlu disalin ke template. Pastikan `DATABASE_URL` tetap tersedia untuk
+Production dan Preview.
+
 ## 5. Deploy
 
 Jadikan folder `ready to publik` sebagai root repository Git tersendiri, lalu import repository tersebut ke Vercel. Vercel akan membaca `vercel.json`, memasang dependency Composer, menjalankan migration, dan menggunakan `api/index.php` sebagai entrypoint Laravel.
